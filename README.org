@@ -1,0 +1,16 @@
+* Iris-Data-Classification
+Part 1 of Mini project 4, machine learning course Winter 2020
+
+* setup
+
+#+begin_src sh
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+#+end_src
+
+To run the sript
+#+begin_src sh
+python main.py
+#+end_src
+
