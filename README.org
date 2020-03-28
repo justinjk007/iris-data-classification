@@ -1,6 +1,9 @@
 * Iris-Data-Classification
 Part 1 of Mini project 4, machine learning course Winter 2020
 
+#+attr_latex: :width 440px
+[[./img/header.png]]
+
 * About the dataset
 
 - Number of Instances: 150 (50 in each of three classes)
@@ -26,7 +29,7 @@ Part 1 of Mini project 4, machine learning course Winter 2020
 
 - Class Distribution: 33.3% for each of 3 classes.
 
-* setup
+* Setup
 
 #+begin_src sh
 virtualenv venv
@@ -39,9 +42,10 @@ To run the sript
 python main.py
 #+end_src
 
-* references
+* References
 
 - http://archive.ics.uci.edu/ml/datasets/Iris
 - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository
   [http://archive.ics.uci.edu/ml]. Irvine, CA: University of
   California, School of Information and Computer Science.
+- https://missinglink.ai/guides/neural-network-concepts/classification-neural-networks-neural-network-right-choice/
