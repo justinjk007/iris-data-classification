@@ -4,7 +4,7 @@ iris_setosa_label = np.array([1, 0, 0])
 iris_versicolor_label = np.array([0, 1, 0])
 iris_virginica_label = np.array([0, 0, 1])
 
-training_input = [
+training_input = np.array([
     [4.8, 3.4, 1.6, 0.2, iris_setosa_label],
     [4.8, 3.0, 1.4, 0.1, iris_setosa_label],
     [4.3, 3.0, 1.1, 0.1, iris_setosa_label],
@@ -110,13 +110,10 @@ training_input = [
     [7.7, 3.0, 6.1, 2.3, iris_virginica_label],
     [6.3, 3.4, 5.6, 2.4, iris_virginica_label],
     [6.4, 3.1, 5.5, 1.8, iris_virginica_label],
-]
-
-# Just get the last column above data, which is the label/category of the flower
-training_expected_output = training_input[:, 4]
+])
 
 # 15 cases of each type of flower is being used for testing, randomly selected.
-testing_input = [
+testing_input = np.array([
     [5.1, 3.5, 1.4, 0.2, iris_setosa_label],
     [4.9, 3.0, 1.4, 0.2, iris_setosa_label],
     [4.7, 3.2, 1.3, 0.2, iris_setosa_label],
@@ -162,9 +159,19 @@ testing_input = [
     [6.5, 3.0, 5.2, 2.0, iris_virginica_label],
     [6.2, 3.4, 5.4, 2.3, iris_virginica_label],
     [5.9, 3.0, 5.1, 1.8, iris_virginica_label],
-]
+])
 
-# testing_output = [
-#     0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8,
-#     8, 8, 9, 9, 9
-# ]
+# first 4 coloumns input
+testing_input_mod = testing_input[:, [0, 1, 2, 3]].tolist()
+
+testing_output = [
+    "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa",
+    "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa",
+    "setosa", "versicolor", "versicolor", "versicolor", "versicolor",
+    "versicolor", "versicolor", "versicolor", "versicolor", "versicolor",
+    "versicolor", "versicolor", "versicolor", "versicolor", "versicolor",
+    "versicolor", "virginica", "virginica", "virginica", "virginica",
+    "virginica", "virginica", "virginica", "virginica", "virginica",
+    "virginica", "virginica", "virginica", "virginica", "virginica",
+    "virginica"
+]

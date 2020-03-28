@@ -3,21 +3,25 @@ import torch.nn as nn
 
 
 class NeuralNetwork(nn.Module):
-    def __init__(self, i, o, h):
+    def __init__(self, i, h1, h2, o):
         super().__init__()  # recommended by pytorch
         self.input_num = i
+        self.hidden1_num = h1
+        self.hidden2_num = h2
         self.output_num = o
-        self.hidden_num = h
         # returns a tensor with random values, weights applicable for input
         # layer and hidden layer
-        self.w1 = torch.randn(self.input_num, self.hidden_num)
-        self.w2 = torch.randn(self.hidden_num, self.output_num)
+        self.w1 = torch.randn(self.input_num, self.hidden1_num)
+        self.w2 = torch.randn(self.hidden1_num, self.hidden2_num)
+        self.w3 = torch.randn(self.hidden2_num, self.output_num)
 
     def forward(self, _input):
         self.z = torch.matmul(_input, self.w1)  # matrix multiplication
         self.z2 = self.sigmoid(self.z)  # activation function
-        self.z3 = torch.matmul(self.z2, self.w2)
-        output = self.sigmoid(self.z3)  # final activation function
+        self.z3 = torch.matmul(self.z2, self.w2)  # apply weights on hidden 1
+        self.z4 = self.sigmoid(self.z3)  # activation function
+        self.z5 = torch.matmul(self.z4, self.w3)  # apply weights on hidden 1
+        output = self.sigmoid(self.z5)  # activation function
         return output
 
     def sigmoid(self, _input):
@@ -32,10 +36,13 @@ class NeuralNetwork(nn.Module):
         self.output_error = exp_output - _output  # error in output
         # derivative of sig to error
         self.output_delta = self.output_error * self.sigmoidPrime(_output)
+        self.z3_error = torch.matmul(self.output_delta, torch.t(self.w3))
         self.z2_error = torch.matmul(self.output_delta, torch.t(self.w2))
+        self.z3_delta = self.z3_error * self.sigmoidPrime(self.z3)
         self.z2_delta = self.z2_error * self.sigmoidPrime(self.z2)
-        self.w1 += torch.matmul(torch.t(_input), self.z2_delta)
-        self.w2 += torch.matmul(torch.t(self.z2), self.output_delta)
+        self.w1 += torch.matmul(torch.t(_input), self.z3_delta)
+        self.w2 += torch.matmul(torch.t(self.z2), self.z2_delta)
+        self.w3 += torch.matmul(torch.t(self.z3), self.output_delta)
 
     def train(self, _input, exp_output):
         # forward + backward pass for training

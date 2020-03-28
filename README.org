@@ -48,4 +48,6 @@ python main.py
 - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository
   [http://archive.ics.uci.edu/ml]. Irvine, CA: University of
   California, School of Information and Computer Science.
+- https://www.neuraldesigner.com/learning/tutorials/neural-network#ClassificationNeuralNetworks
 - https://missinglink.ai/guides/neural-network-concepts/classification-neural-networks-neural-network-right-choice/
+- https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tolist.html
