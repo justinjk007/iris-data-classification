@@ -112,6 +112,11 @@ training_input = np.array([
     [6.4, 3.1, 5.5, 1.8, iris_virginica_label],
 ])
 
+# first 4 coloumns input
+training_input_mod = training_input[:, [0, 1, 2, 3]].tolist()
+# last coloumn is ouput
+training_expected_output = training_input[:, 4].tolist()
+
 # 15 cases of each type of flower is being used for testing, randomly selected.
 testing_input = np.array([
     [5.1, 3.5, 1.4, 0.2, iris_setosa_label],

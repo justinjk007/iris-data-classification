@@ -20,7 +20,7 @@ class NeuralNetwork(nn.Module):
         self.z2 = self.sigmoid(self.z)  # activation function
         self.z3 = torch.matmul(self.z2, self.w2)  # apply weights on hidden 1
         self.z4 = self.sigmoid(self.z3)  # activation function
-        self.z5 = torch.matmul(self.z4, self.w3)  # apply weights on hidden 1
+        self.z5 = torch.matmul(self.z4, self.w3)  # apply weights on hidden 2
         output = self.sigmoid(self.z5)  # activation function
         return output
 
@@ -34,15 +34,17 @@ class NeuralNetwork(nn.Module):
 
     def backward(self, _input, exp_output, _output):
         self.output_error = exp_output - _output  # error in output
-        # derivative of sig to error
         self.output_delta = self.output_error * self.sigmoidPrime(_output)
-        self.z3_error = torch.matmul(self.output_delta, torch.t(self.w3))
+
         self.z2_error = torch.matmul(self.output_delta, torch.t(self.w2))
-        self.z3_delta = self.z3_error * self.sigmoidPrime(self.z3)
         self.z2_delta = self.z2_error * self.sigmoidPrime(self.z2)
-        self.w1 += torch.matmul(torch.t(_input), self.z3_delta)
-        self.w2 += torch.matmul(torch.t(self.z2), self.z2_delta)
-        self.w3 += torch.matmul(torch.t(self.z3), self.output_delta)
+
+        self.z4_error = torch.matmul(self.output_delta, torch.t(self.w3))
+        self.z4_delta = self.z4_error * self.sigmoidPrime(self.z4)
+
+        self.w1 += torch.matmul(torch.t(_input), self.z2_delta)
+        self.w2 += torch.matmul(torch.t(self.z2), self.z4_delta)
+        self.w3 += torch.matmul(torch.t(self.z4), self.output_delta)
 
     def train(self, _input, exp_output):
         # forward + backward pass for training

@@ -19,11 +19,34 @@ def spit_out_name_from_output(output):
         return "virginica"
 
 
+def scale_input(array):
+    """Scale input using mean and standard deviation, mean and SD are
+     available in the database description"""
+    # scaled_input = (input-mean)/standard deviation
+    scale_sepal_length = (array[0] - 5.84) / 0.83
+    scale_sepal_width = (array[1] - 3.05) / 0.43
+    scale_petal_length = (array[2] - 3.76) / 1.76
+    scale_petal_width = (array[3] - 1.20) / 0.76
+    return [
+        scale_sepal_length,
+        scale_sepal_width,
+        scale_petal_length,
+        scale_petal_width,
+    ]
+
+
 def test_trained_network(ANN):
     print("Trained network being tested...\n")
     error_count = 0
+
+    # scale the data with mean and SD
+    unscaled_input = data.testing_input_mod
+    scaled_input = []
+    for i in unscaled_input:
+        scaled_input.append(scale_input(i))
+
     for i in range(len(data.testing_input_mod)):
-        _input = torch.tensor(data.testing_input_mod[i], dtype=torch.float)
+        _input = torch.tensor(scaled_input[i], dtype=torch.float)
         exp_output = data.testing_output[i]
         print("Expected output  : ", exp_output)
         _output = ANN.predict(_input)
@@ -35,11 +58,15 @@ def test_trained_network(ANN):
 
 
 def main():
-    # load data
-    _input = torch.tensor(data.training_input[:, [0, 1, 2, 3]].tolist(),
-                          dtype=torch.float)  # first 4 coloumns input
-    _output = torch.tensor(data.training_input[:, 4].tolist(),
-                           dtype=torch.float)  # last coloumn is ouput
+    # scale the data with mean and SD
+    unscaled_input = data.training_input_mod
+    scaled_input = []
+    for i in unscaled_input:
+        scaled_input.append(scale_input(i))
+
+    # load data into tensor
+    _input = torch.tensor(scaled_input, dtype=torch.float)
+    _output = torch.tensor(data.training_expected_output, dtype=torch.float)
 
     # This section is for plotting ##############################
     gene_array = []
@@ -52,7 +79,7 @@ def main():
 
     ANN = NeuralNetwork(i=4, h1=3, h2=3, o=3)  # input,output,hidden layer size
     # weight training
-    for i in range(1000):
+    for i in range(30000):
         # mean sum squared error
         mean_error = torch.mean((_output - ANN(_input))**2).detach().item()
         print("Generation: " + str(i) + " error: " + str(mean_error))
@@ -61,7 +88,7 @@ def main():
         ANN.train(_input, _output)
 
     torch.save(ANN, "algo1.weights")
-    # ANN = torch.load("14_good.weights")
+    # ANN = torch.load("1_error.weights")
     test_trained_network(ANN)
     ax.plot(gene_array, loss_array)
     plt.show()
