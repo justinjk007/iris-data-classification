@@ -169,14 +169,10 @@ testing_input = np.array([
 # first 4 coloumns input
 testing_input_mod = testing_input[:, [0, 1, 2, 3]].tolist()
 
-testing_output = [
-    "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa",
-    "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa",
-    "setosa", "versicolor", "versicolor", "versicolor", "versicolor",
-    "versicolor", "versicolor", "versicolor", "versicolor", "versicolor",
-    "versicolor", "versicolor", "versicolor", "versicolor", "versicolor",
-    "versicolor", "virginica", "virginica", "virginica", "virginica",
-    "virginica", "virginica", "virginica", "virginica", "virginica",
-    "virginica", "virginica", "virginica", "virginica", "virginica",
-    "virginica"
-]
+testing_output = []
+for i in range(15):
+    testing_output.append("setosa")
+for i in range(15):
+    testing_output.append("versicolor")
+for i in range(15):
+    testing_output.append("virginica")

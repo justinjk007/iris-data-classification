@@ -79,7 +79,7 @@ def main():
 
     ANN = NeuralNetwork(i=4, h1=3, h2=3, o=3)  # input,output,hidden layer size
     # weight training
-    for i in range(30000):
+    for i in range(15000):
         # mean sum squared error
         mean_error = torch.mean((_output - ANN(_input))**2).detach().item()
         print("Generation: " + str(i) + " error: " + str(mean_error))
