@@ -1,12 +1,31 @@
-from neural_net import NeuralNetwork
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from torch import optim
 import matplotlib.pyplot as plt
+from torch import optim
+import torch.nn as nn
 import numpy as np
 import pandas as pd
 import torch
-import torch.nn as nn
+
+
+class NeuralNetwork(nn.Module):
+    def __init__(self, i, h1, h2, o):
+        super(NeuralNetwork, self).__init__()
+        self.layer1 = nn.Linear(i, h1)
+        self.layer2 = nn.Linear(h1, h2)
+        self.layer3 = nn.Linear(h2, o)
+
+        # Define relu activation and LogSoftmax output
+        self.relu = nn.ReLU()
+        self.sig = nn.Sigmoid()
+        self.dropout = torch.nn.Dropout(p=0.5, inplace=False)
+        self.logSoftmax = nn.LogSoftmax(dim=1)
+
+    def forward(self, x):
+        out = self.relu(self.layer1(x))
+        out = self.relu(self.layer2(out))
+        out = self.logSoftmax(self.layer3(out))
+        return out
 
 
 def test_trained_network(model, test_X, test_Y):
@@ -74,11 +93,6 @@ def main():
     dataset.loc[dataset.species == 'Iris-versicolor', 'species'] = 1
     dataset.loc[dataset.species == 'Iris-virginica', 'species'] = 2
 
-    # unscaled_input = dataset[dataset.columns[0:4]].values
-    # scaled_input = []
-    # for i in unscaled_input:
-    #     scaled_input.append(scale_input(i))
-
     # scale the dataset
     dataset = dataset.apply(scale_input, axis=1)
 
@@ -92,7 +106,7 @@ def main():
     train_Y = train_Y.astype(np.float32)
     test_Y = train_Y.astype(np.float32)
 
-    # # scale the data
+    # # another way to scale the data
     # sc = StandardScaler()
     # train_X = sc.fit_transform(train_X)
     # test_X = sc.fit_transform(test_X)
@@ -111,27 +125,26 @@ def main():
     # This section is for plotting ##############################
 
     # input,output,hidden layer size
-    model = NeuralNetwork(i=4, h1=3, h2=3, o=3)
+    model = NeuralNetwork(i=4, h1=6, h2=4, o=3)
 
     # loss function and optimizer
     lossFunction = nn.CrossEntropyLoss()
-    # learning rate and momentum
-    optimizer = optim.SGD(model.parameters(), lr=0.005, momentum=0.9)
+    # lossFunction = nn.BCELoss(size_average=True)  # BinaryCrossEntropy
+    # learning rate
+    optimizer = optim.SGD(model.parameters(), lr=0.01)
 
-    for epoch in range(1500):
+    for epoch in range(10000):
+        optimizer.zero_grad()
         # Forward Pass
         output = model(_input)
         # Loss at each oteration by comparing to target
         loss = lossFunction(output, _output)
-
         # Backpropogating gradient of loss
-        optimizer.zero_grad()
         loss.backward()
-
         # Updating parameters(weights and bias)
         optimizer.step()
         _loss = loss.item()
-
+        # Upadate graph points
         gene_array.append(epoch)
         loss_array.append(_loss)
         print("Epoch {}, Training loss: {}".format(epoch, _loss / len(_input)))
