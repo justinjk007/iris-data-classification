@@ -1,5 +1,6 @@
 * Iris-Data-Classification
 Part 1 of Mini project 4, machine learning course Winter 2020
+
 NOTE: Master is work in progress, see finished version in [[https://github.com/justinjk007/iris-data-classification/tree/v1.0][v1.0]]
 
 #+attr_latex: :width 440px
